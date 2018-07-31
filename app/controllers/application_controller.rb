@@ -20,4 +20,9 @@ class ApplicationController < ActionController::Base
   end
 
   def index; end
+
+  def questions
+    render json: Question.includes(:user, answers: [:user])
+                         .where(is_private: false), status: :ok
+  end
 end
