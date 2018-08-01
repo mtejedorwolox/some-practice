@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
 
   def questions
     render json: Question.includes(:user, answers: [:user])
-                         .where(is_private: false), status: :ok
+                         .where(is_private: false),
+           include: 'asker,answers,answers.provider',
+           status: :ok
   end
 end
