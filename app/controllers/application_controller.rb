@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # i18n configuration. See: http://guides.rubyonrails.org/i18n.html
-  before_action :set_locale
+  before_action :set_locale, :authenticate_request, except: :index
 
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
@@ -19,12 +19,28 @@ class ApplicationController < ActionController::Base
     options.merge(locale: I18n.locale)
   end
 
-  def index; end
+  def index
+    @users_count = User.count
+    @answers_count = Answer.count
+    @questions_count = Question.count
+    @tenants = Tenant.all
+  end
 
   def questions
-    render json: Question.includes(:user, answers: [:user])
-                         .where(is_private: false),
+    questions = @tenant.questions.includes(:user, answers: [:user])
+                                 .is_public
+                                 .terms(params[:terms])
+    return head :not_found if questions.empty?
+    render json: questions,
            include: 'asker,answers,answers.provider',
            status: :ok
+  end
+
+  private
+
+  def authenticate_request
+    @tenant = Tenant.find_by(api_key: params['api_key'])
+    return head :unauthorized unless @tenant.present?
+    @tenant.increment!(:request)
   end
 end

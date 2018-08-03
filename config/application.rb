@@ -10,6 +10,7 @@ require 'action_mailer/railtie'
 require 'action_view/railtie'
 require 'action_cable/engine'
 require 'sprockets/railtie'
+require './app/middlewares/throttler.rb'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -29,6 +30,8 @@ module SomePractice
     end
 
     # Tell your app to use the Rack::Attack middleware
+    config.middleware.use Throttler
+
     config.middleware.use Rack::Attack
 
     config.middleware.insert_before 0, Rack::Cors do
