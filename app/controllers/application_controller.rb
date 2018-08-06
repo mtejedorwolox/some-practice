@@ -28,8 +28,8 @@ class ApplicationController < ActionController::Base
 
   def questions
     questions = @tenant.questions.includes(:user, answers: [:user])
-                                 .is_public
-                                 .terms(params[:terms])
+                       .is_public
+                       .terms(params[:terms])
     return head :not_found if questions.empty?
     render json: questions,
            include: 'asker,answers,answers.provider',
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_request
     @tenant = Tenant.find_by(api_key: params['api_key'])
-    return head :unauthorized unless @tenant.present?
-    @tenant.increment!(:request)
+    return head :unauthorized if @tenant.blank?
+    @tenant.increment(:request)
   end
 end

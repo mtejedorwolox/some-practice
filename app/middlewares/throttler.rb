@@ -6,10 +6,10 @@ class Throttler
   def call(env)
     req = Rack::Request.new(env)
     api_key = req.params['api_key']
-    return @app.call(env) unless api_key.present?
+    return @app.call(env) if api_key.blank?
     day_requests(api_key)
-    if (throttled?(api_key))
-      [429, {'Content-Type' => 'application/json'}, []]
+    if throttled?(api_key)
+      [429, { 'Content-Type' => 'application/json' }, []]
     else
       add_count(api_key)
       @app.call(env)
@@ -23,13 +23,13 @@ class Throttler
   end
 
   def increment(key, expires_in)
-    result = store.increment(key, 1, :expires_in => expires_in)
-    store.write(key, 1, :expires_in => expires_in) if result.nil?
+    result = store.increment(key, 1, expires_in: expires_in)
+    store.write(key, 1, expires_in: expires_in) if result.nil?
     result || 1
   end
 
   def day_requests(key)
-    expires_in = ((DateTime.now.end_of_day - DateTime.now) * 24 * 60 * 60).to_i
+    expires_in = ((DateTime.current.end_of_day - DateTime.current) * 24 * 60 * 60).to_i
     increment(day_prefix(key), expires_in)
   end
 

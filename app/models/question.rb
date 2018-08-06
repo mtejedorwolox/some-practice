@@ -13,5 +13,5 @@ class Question < ApplicationRecord
     where((['lower(text) like ?'] * terms.size).join(' AND '), *terms.map { |term| "%#{term}%" })
   }
 
-  scope :is_public, lambda { where(is_private: false) }
+  scope :is_public, -> { where(is_private: false) }
 end
