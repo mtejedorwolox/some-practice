@@ -8,3 +8,24 @@
 
 @import 'commons';
 
+.users-count, .questions-count, .answers-count {
+  background: #888;
+  border-radius: 4px;
+  color: #fff;
+  display: flex;
+  font-size: 20px;
+  justify-content: space-between;
+  margin: 20px 75px;
+  padding: 0 10px;
+  text-align: left;
+  width: 250px;
+}
+
+.tenants-table {
+  margin: 20px 75px;
+
+  th {
+    border: solid 1px #bbb;
+    padding: 0 10px;
+  }
+}

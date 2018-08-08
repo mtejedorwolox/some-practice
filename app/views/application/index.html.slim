@@ -2,7 +2,28 @@
   h1
     = t('application.index.messages.welcome')
   div
-    = @users_count
-    = @questions_count
-    = @answers_count
-    = @tenants
+    .users-count
+      span
+        | Total users:
+      b
+        = @users_count
+    .questions-count
+      span
+        | Total questions:
+      b
+        = @questions_count
+    .answers-count
+      span
+        | Total answers:
+      b
+        = @answers_count
+    table.tenants-table
+      tr
+        th Name
+        th Requests
+      - @tenants.each do |t|
+        tr
+          th
+            = t.name
+          th
+            = t.request
