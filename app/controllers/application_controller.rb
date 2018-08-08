@@ -41,6 +41,6 @@ class ApplicationController < ActionController::Base
   def authenticate_request
     @tenant = Tenant.find_by(api_key: params['api_key'])
     return head :unauthorized if @tenant.blank?
-    @tenant.increment(:request)
+    @tenant.increment(:request).save
   end
 end
