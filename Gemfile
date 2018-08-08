@@ -80,6 +80,10 @@ gem 'webpacker', '~> 3.0'
 
 gem 'health_check', '~> 3.0'
 
+gem 'factory_bot_rails'
+
+gem 'faker'
+
 group :development do
   # Gem to detect N+1 queries
   gem 'better_errors'
@@ -103,9 +107,6 @@ group :development, :test do
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-
-  gem 'factory_bot_rails'
-  gem 'faker'
 
   # Lints
   gem 'rubocop', '0.50.0'
